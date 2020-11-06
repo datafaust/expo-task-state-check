@@ -94,9 +94,10 @@ class App extends Component {
           const submitted = this.state.submitted
           const autoCheckin = this.autoTrackingCheckin
           const autoCheckout = this.autoTrackingCheckout
+          const reducerSubmitted = store.getState().reducer.submitted
 
-          console.log('THE VARIABLE BEING PASSED...',submitted)
-          configureBgTasks({ submitted, autoCheckin, autoCheckout })
+          console.log('THE VARIABLE BEING PASSED...',reducerSubmitted)
+          configureBgTasks({ reducerSubmitted })
           startBackgroundUpdate();
         }
         catch (error) {
@@ -107,7 +108,7 @@ class App extends Component {
 
   render() {
 
-    console.log('***********APP.JS STATUS:', this.state.submitted);
+    //console.log('***********APP.JS STATUS:', this.state.submitted);
     console.log('***********REDUCER APP.JS STATUS:', store.getState().reducer.submitted);
 
     return (

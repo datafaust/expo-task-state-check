@@ -17,13 +17,15 @@ export const configureBgTasks = ({ submitted, autoCheckin, autoCheckout }) => {
             //get location data from background
             const { locations } = data;
             let myStatus = store.getState()
-            console.log('****LOCATION PINGING... submitted IS NOW:', submitted);
+            //console.log('****LOCATION PINGING... submitted IS NOW:', submitted);
             console.log('****REDUCER LOCATION PINGING... submitted IS NOW:', myStatus.reducer.submitted);
-            if (submitted === false) {
-                autoCheckin();
+            if (myStatus === false) {
+                //autoCheckin();
+                store.dispatch({ type: "SUBMITTED", value: true })
                 console.log('****CHECKING YOU IN...');
-            } else if(submitted === true) {
-                autoCheckout();
+            } else if(myStatus === true) {
+                //autoCheckout();
+                store.dispatch({ type: "SUBMITTED", value: false })
                 console.log('*****CHECKING YOU OUT...')
             }
         }
