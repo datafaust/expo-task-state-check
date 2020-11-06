@@ -97,7 +97,7 @@ class App extends Component {
           const reducerSubmitted = store.getState().reducer.submitted
 
           console.log('THE VARIABLE BEING PASSED...',reducerSubmitted)
-          configureBgTasks({ reducerSubmitted })
+          configureBgTasks({ autoCheckin, autoCheckout })
           startBackgroundUpdate();
         }
         catch (error) {

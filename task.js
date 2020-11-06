@@ -5,7 +5,7 @@ import ourReducer from './store/reducer';
 import { createStore } from 'redux';
 const store = createStore(ourReducer);
 
-export const configureBgTasks = ({ submitted, autoCheckin, autoCheckout }) => {
+export const configureBgTasks = ({ autoCheckin, autoCheckout }) => {
 
     TaskManager.defineTask(TASK_FETCH_LOCATION_TEST, ({ data, error }) => {
 
@@ -16,16 +16,18 @@ export const configureBgTasks = ({ submitted, autoCheckin, autoCheckout }) => {
         if (data) {
             //get location data from background
             const { locations } = data;
-            let myStatus = store.getState()
+            //let myStatus = store.getState().reducer.submitted
             //console.log('****LOCATION PINGING... submitted IS NOW:', submitted);
-            console.log('****REDUCER LOCATION PINGING... submitted IS NOW:', myStatus.reducer.submitted);
-            if (myStatus === false) {
-                //autoCheckin();
-                store.dispatch({ type: "SUBMITTED", value: true })
+            console.log('****REDUCER LOCATION PINGING... submitted IS NOW:', store.getState().reducer.submitted);
+            
+            if (store.getState().reducer.submitted === false) {
+                autoCheckin();
+                //store.dispatch({ type: "SUBMITTED", value: true })
                 console.log('****CHECKING YOU IN...');
-            } else if(myStatus === true) {
-                //autoCheckout();
-                store.dispatch({ type: "SUBMITTED", value: false })
+
+            } else if(store.getState().reducer.submitted === true) {
+                autoCheckout();
+                //store.dispatch({ type: "SUBMITTED", value: false })
                 console.log('*****CHECKING YOU OUT...')
             }
         }
