@@ -4,6 +4,13 @@ import { StyleSheet, Text, View, Button, Platform, Alert } from 'react-native';
 import * as Location from "expo-location";
 import { configureBgTasks } from './task';
 import * as TaskManager from 'expo-task-manager';
+
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { connect } from "react-redux";
+
+import ourReducer from './store/reducer';
+const store = createStore(ourReducer);
 const TASK_FETCH_LOCATION_TEST = 'background-location-task';
 
 class App extends Component {
@@ -11,7 +18,6 @@ class App extends Component {
   state = {
     submitted: false
   }
-
 
   async componentDidMount() {
     const { status } = await Location.requestPermissionsAsync();
@@ -29,19 +35,19 @@ class App extends Component {
       TaskManager.unregisterTaskAsync(TASK_FETCH_LOCATION_TEST);
     }
 
-
     //REFERENCES TO STATE
     autoTrackingCheckin = () => {
       console.log('^^firing checkin')
       this.setState({ submitted: true });
+      store.dispatch({ type: "SUBMITTED", value: true })
     }
 
     autoTrackingCheckout = () => {
       console.log('^^firing checkout')
       this.setState({ submitted: false });
+      store.dispatch({ type: "SUBMITTED", value: false })
     }
   
-
     executeBackground = async () => {
 
       //START LOCATION TRACKING
@@ -81,8 +87,6 @@ class App extends Component {
         }
       }
 
-
-
        //WHERE THE MAGIC IS SUPPOSED TO HAPPEN
         try {
 
@@ -90,7 +94,7 @@ class App extends Component {
           const submitted = this.state.submitted
           const autoCheckin = this.autoTrackingCheckin
           const autoCheckout = this.autoTrackingCheckout
-          
+
           console.log('THE VARIABLE BEING PASSED...',submitted)
           configureBgTasks({ submitted, autoCheckin, autoCheckout })
           startBackgroundUpdate();
@@ -99,18 +103,15 @@ class App extends Component {
           console.log(error)
         }
 
-
     }
-
-
-  
-
 
   render() {
 
     console.log('***********APP.JS STATUS:', this.state.submitted);
+    console.log('***********REDUCER APP.JS STATUS:', store.getState().reducer.submitted);
 
     return (
+      <Provider store={ store }>
       <View style={styles.container}>
       
       <Button
@@ -124,9 +125,23 @@ class App extends Component {
         />
       <StatusBar style="auto" />
       </View>
+      </Provider>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+
+  const { reducer } = state
+  return { reducer }
+};
+
+const mapDispachToProps = dispatch => {
+  return {
+    storeCheck: (y) => dispatch({ type: "SUBMITTED", value: y })
+
+  };
+};
 
 export default App;
 
