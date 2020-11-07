@@ -5,7 +5,7 @@ import ourReducer from './store/reducer';
 import { createStore } from 'redux';
 const store = createStore(ourReducer);
 
-export const configureBgTasks = ({ autoCheckin, autoCheckout }) => {
+export const configureBgTasks = ({ reducerSubmitted, autoCheckin, autoCheckout }) => {
 
     TaskManager.defineTask(TASK_FETCH_LOCATION_TEST, ({ data, error }) => {
 
@@ -17,18 +17,18 @@ export const configureBgTasks = ({ autoCheckin, autoCheckout }) => {
             //get location data from background
             const { locations } = data;
             //let myStatus = store.getState().reducer.submitted
-            //console.log('****LOCATION PINGING... submitted IS NOW:', submitted);
+            console.log('****PASSED LOCATION PINGING... submitted IS NOW:', reducerSubmitted);
             console.log('****REDUCER LOCATION PINGING... submitted IS NOW:', store.getState().reducer.submitted);
             
             if (store.getState().reducer.submitted === false) {
                 autoCheckin();
                 //store.dispatch({ type: "SUBMITTED", value: true })
-                console.log('****CHECKING YOU IN...');
+                //console.log('****CHECKING YOU IN...');
 
             } else if(store.getState().reducer.submitted === true) {
                 autoCheckout();
                 //store.dispatch({ type: "SUBMITTED", value: false })
-                console.log('*****CHECKING YOU OUT...')
+                //console.log('*****CHECKING YOU OUT...')
             }
         }
     })
