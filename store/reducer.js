@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 
 const INITIAL_STATE = {
-  submitted: false
+  submitted: false,
+  test: 'test'
 };
 
 const ourReducer = (state = INITIAL_STATE, action) => {
